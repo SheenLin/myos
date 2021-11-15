@@ -1,4 +1,4 @@
-// Physical memory allocator, for user processes,
+// **Physical memory allocator**, for user processes,
 // kernel stacks, page-table pages,
 // and pipe buffers. Allocates whole 4096-byte pages.
 
@@ -60,6 +60,18 @@ kfree(void *pa)
   r->next = kmem.freelist;
   kmem.freelist = r;
   release(&kmem.lock);
+}
+
+uint64 getFreeMem() {
+  acquire(&kmem.lock);
+  struct run *r = kmem.freelist;
+  uint64 cnt = 0;
+  while (r) {
+    ++cnt;
+    r = r->next;
+  }
+  release(&kmem.lock);
+  return cnt * PGSIZE;
 }
 
 // Allocate one 4096-byte page of physical memory.
