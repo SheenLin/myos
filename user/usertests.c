@@ -2400,7 +2400,7 @@ sbrkbugs(char *s)
     exit(0);
   }
   wait(0);
-
+  
   pid = fork();
   if(pid < 0){
     printf("fork failed\n");
